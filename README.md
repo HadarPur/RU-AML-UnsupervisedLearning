@@ -9,7 +9,7 @@ Submitted as a project report for Advanced Machine Learning course, IDC, 2024
 - **Dataset Overview:** The MNIST dataset comprises 70,000 images. Each image represents a single, centered, handwritten digit (0-9) and is size-normalized and grey-scaled. The images are presented as a 28x28 pixel grid, resulting in 784 features.
 
 ![Digits Data Examples](plots/part_0/example_digits.png)
-![Digits Data Distribution](plots/part_0/digit_distribution.png)
+![Digits Data Distribution](plots/part_0/digit_distribution .png)
 
 - **Size-Normalization and Centering:** During initial preprocessing, the dataset underwent size-normalization and centering to ensure uniformity in digit representations and simplify the learning process for machine learning models.
 
