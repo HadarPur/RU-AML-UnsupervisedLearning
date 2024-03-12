@@ -289,4 +289,81 @@ We conducted classification on the entire dataset using two classifiers: Random 
 
 </div>
 
+### Hyper-parameters Tuning on k-NN
+
+For hyperparameter tuning in the k-Nearest Neighbors (k-NN) algorithm, we explored various combinations to determine the best configuration. Specifically, we tested different values for parameters such as the number of neighbors (`n_neighbors`), which represents the number of neighboring data points considered when determining the class or cluster of a given data point. Additionally, we experimented with the `weight` parameter, allowing different weight methods for the data points in the neighborhood, influencing their contribution to the decision. Furthermore, we considered the `algorithm` parameter, which specifies the algorithm used to compute the nearest neighbors (e.g., 'auto', 'kd_tree'). 
+
+The worse result was observed with `n_neighbors`=200, 'uniform' weights and the 'auto' algorithm, resulting in a test accuracy of 92.3%, while the best performance was achieved with `n_neighbors`=3, 'distance' weights, and the 'auto' algorithm, yielding a **test accuracy of 97.3%**. Detailed results for each run are available in the notebook.
+
+### Dimensionality reduction
+
+We conducted a classification on the data after dimensionality reduction, considering PCA with parameters (`n_components`=200, `solver`=full) and t-SNE with (`perplexity`=150, `n_components`=2), along with k-NN with 3 neighbors for PCA and 5 for t-SNE (for identical measurements while having best classifications) vs a Random Forest with 200 estimators. However, superior results were obtained with PCA, as shown in the table below. It may be attributed to its ability to capture essential patterns and structures in the data while reducing dimensionality, compared to t-SNE, which requires additional steps and may be sensitive to its initializations.
+
+To implement t-SNE, we included additional steps due to its lack of a transform method. Additionally, we trained an MLPRegressor on the original data to predict t-SNE embeddings and applied the model to predict t-SNE embeddings on the test data.
+
+<div align="center">
+
+| Method                                    | DR Method | Accuracy on transformed test set |
+|-------------------------------------------|-----------|----------------------------------|
+| **Random Forest (n_estimators=200)**      | **PCA**   | **94.94%**                       |
+| k-NN (n_neighbors=3)                      | PCA       | 93.20%                           |
+| Random Forest (n_estimators=200)          | t-SNE     | 81.79%                           |
+| k-NN (n_neighbors=5)                      | t-SNE     | 83.22%                           |
+
+*Table 10: Classification Performance on Transformed Test Set*
+
+</div>
+
+#### Hyper-parameters Tuning on RF + PCA
+
+For hyperparameter tuning in the Random Forest classifier applied to PCA-transformed data, we conducted an extensive exploration to identify the optimal configuration. The parameter grid encompassed various combinations, including `n_estimators` representing the number of trees in the forest, `max_depth` determining the maximum depth of the trees, `min_samples_split` and `min_samples_leaf` defining the minimum number of samples required to split an internal node and the minimum number of samples required to be a leaf node, respectively. Additionally, the `bootstrap` parameter, which controls whether bootstrap samples are used, was varied between True and False.
+
+The worse result was observed with `n_estimators`=50, `max_depth`=10, `min_samples_split`=5, `min_samples_leaf`=1, and `bootstrap`=True, resulting in a test accuracy of 90.66%, while the best performance was achieved with `n_estimators`=200, `max_depth`=None, `min_samples_split`=5, `min_samples_leaf`=2, and `bootstrap`=False, yielding a **test accuracy of 95.43%**. Detailed results for each run are available in the notebook.
+
+### Clustering
+
+We developed a straightforward classifier, leveraging the optimal clustering results obtained in the previous step. We used k-means with 10 clusters and default parameters, which performed best in section 3. The classifier assigns a label to each cluster, specifically designating the most common digit found within the cluster as its representative label. To achieve this, we iterated through each unique cluster and determined the most prevalent digit by analyzing the actual labels (digits) corresponding to the data points within that cluster. The label assignment process was based on the digit with the highest frequency within the cluster.
+
+For evaluating the classifier's performance, we utilized the cluster assignments predicted for the test images. Subsequently, we predicted the digit for each test image based on its assigned cluster, using the labels assigned to the clusters during the fitting phase. The accuracy of this classifier was assessed by comparing the predicted digits to the actual digits from the test set.
+
+We trained our classifier twice—once on the original high-dimensional data and once on the reduced data, using t-SNE with 2 components and perplexity=150. This choice was optimal compared to the PCA method, due to t-SNE's emphasis on maintaining pairwise similarities between data points, making it well-suited for visualizing clusters. Subsequently, we evaluated the classifier's performance in classifying the test data for both scenarios. The test set accuracy for the classifier fitted on the high-dimensional data was 58%, whereas it reached 84% when trained on the low-dimensional data.
+
+![Digits Prediction of kmeans with K Clusters](plots/figure10.png)
+
+#### Experimenting with different Hyper-parameters
+
+As we identified the optimal k-means algorithm in Section 3 (K-means with K-means++ initialization using the Lloyd algorithm) and explored various values for the `algorithm` and `init` parameters, we now investigated the impact of the number of clusters (`n_clusters`) and examined different values for the `n_init` parameter on the test set accuracy. In k-means clustering, the `n_init` parameter determines the number of times the k-means algorithm will be executed with different centroid seeds. We conducted these experiments using a classifier trained on the high-dimensional data. The results are displayed in the table below.
+
+<div align="center">
+
+| Clusters | n_init | Accuracy |
+|----------|--------|----------|
+| 5        | 10     | 45.57%   |
+| 5        | auto   | 45.57%   |
+| 10       | 10     | 58.38%   |
+| 10       | auto   | 59.04%   |
+| 40       | 10     | 78.40%   |
+| 40       | auto   | 80.41%   |
+| 80       | 10     | 85.69%   |
+| 80       | auto   | 85.75%   |
+| **100**  | **10** | **87.55%**|
+| 100      | auto   | 86.83%   |
+
+*Table 11: Accuracy on the Test Set with Different Configurations*
+
+</div>
+
+### Summary and Conclusions
+
+In this assignment, we used a range of techniques to categorize and group the MNIST dataset. We investigated various dimensionality reduction approaches to simplify the MNIST data, conducted unsupervised tasks such as clustering to identify similarities and patterns, and utilized classifiers to evaluate performance on a new unseen data. In each section, we thoroughly examined diverse parameters for each technique, in order to identify the optimal combinations at each stage. Eventually, we created a basic classifier that used majority voting to assign the most probable digit to each cluster.
+
+We tried several methods to reduce the dimensionality of the data, like PCA, TSVD, t-SNE, and UMAP, on the MNIST dataset. Hyper-parameter tuning was conducted for each dimensionality reduction method, focusing on parameters such as the number of components, solver algorithms, perplexity, and learning rate. In our experimentation, we achieved superior outcomes when using a higher number of components for PCA, specifically utilizing 200 components. Similarly, in the case of t-SNE, but due to its extended runtime, we limited our exploration to 2 and 3 components. The evaluation criteria included reconstruction error and explained variance for PCA, while t-SNE was assessed based on KL divergence. 
+However, our findings indicate that increasing the number of components, especially with higher perplexity values in the t-SNE algorithm, is likely to improve visualization and effectively reduce the number of features in the dataset while retaining essential information and preserving critical patterns and structures in the data. Given access to more powerful computer resources, it is possible that we could achieve improved results in this task, running t-SNE on 5 components for example with higher perplexity values.
+
+We applied the clustering algorithms K-Means and Gaussian Mixture Model (GMM) to the entire training dataset, comprising 80% of the total data. The models were trained using the "fit" function, and predictions were made to determine the cluster for each sample in the dataset. We visualized the results using the t-SNE dimensionality reduction algorithm, which proved effective for clustering representation. To optimize performance, we conducted hyper-parameter tuning for both K-Means and GMM. The best clustering results were observed with K-Means clustering method using K-means++ initialization and the Lloyd algorithm. 
+Despite using the best KMeans algorithm on fitting the data, the results were suboptimal with a silhouette score slightly above 0, and the clusters lacked clear definition in the visualization. This is in contrast to fitting KMeans directly on the entire low-dimensional dataset after t-SNE, which yielded a better silhouette score around 0.5 and presented clearer cluster visualization, as demonstrated earlier. One possible explanation for the superior performance when clustering on data post t-SNE is that t-SNE excels at capturing and visualizing local structures and patterns within the data, while helping to mitigate overfitting which often happens with high-dimensional data.
+
+Our classification phase involved the application of two distinct classifiers, each excelling in different scenarios, whether working with transformed or raw data. The k-NN algorithm, leveraging the majority class among its k-nearest neighbors, and the Random Forest Classifier, an ensemble learning method utilizing multiple decision trees, were performed. When applied to the high-dimensional train set, both classifiers achieved an impressive accuracy of approximately 97%. Additionally, we explored the impact of dimensionality reduction techniques such as PCA and t-SNE on classification. While t-SNE required additional steps due to its lack of a transform method, PCA demonstrated superior results in terms of accuracy on the transformed test set.
+
+In the last part, we developed a k-means classifier with 10 clusters, leveraging optimal clustering results from the previous step. Labels were assigned to clusters based on the most common digit within each cluster. Evaluation on test images yielded 58% accuracy for high-dimensional data and 84% for low-dimensional data using t-SNE. Further exploration involved examining k-means parameters, revealing that an optimal configuration with 100 clusters (although the dataset contains only 10 labels) achieved the highest accuracy at 87.55% on the test set. It is possible
 
