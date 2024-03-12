@@ -4,7 +4,7 @@ Timot Baruch, Hadar Pur
 
 Submitted as a project report for Advanced Machine Learning course, IDC, 2024
 
-# Background, data exploration, and preprocessing
+## Background, data exploration, and preprocessing
 
 - **Dataset Overview:** The MNIST dataset comprises 70,000 images. Each image represents a single, centered, handwritten digit (0-9) and is size-normalized and grey-scaled. The images are presented as a 28x28 pixel grid, resulting in 784 features.
 
@@ -16,7 +16,7 @@ Submitted as a project report for Advanced Machine Learning course, IDC, 2024
 
 - **Data Standardization:** Despite applying StandardScaler to standardize dataset features with a mean of 0 and a standard deviation of 1, no significant enhancement in classifier performance or accuracy was observed. Consequently, the decision was made to proceed without scaling the data. Additionally, during Principal Component Analysis (PCA) for dimensionality reduction, the scaled data exhibited lower cumulative variance compared to unscaled data for a given number of components.
 
-# Dimensionality reduction
+## Dimensionality reduction
 
 We utilized various dimensionality reduction techniques to enhance the understanding of the MNIST dataset and visualize it in a 2-dimensional feature space. The following brief explanations outline each algorithm's role:
 
@@ -33,7 +33,7 @@ For all these techniques, default parameters were applied to obtain a baseline r
 ![PCA TSVD Visualization](plots/figure2.png)
 ![UMAP and t-SNE Visualization](plots/figure3.png)
 
-## Hyper-parameters Tuning On DR Methods
+### Hyper-parameters Tuning On DR Methods
 
 For the PCA and t-SNE methods, we conducted extensive hyperparameter testing to identify the most effective combination for optimizing performance. The key hyperparameters explored for each DR method are outlined below according to the DR used. The best run is highlighted in bold in each table.
 \newline Due to exceptionally long running times, UMAP  testing was excluded from this phase of analysis. Also, TSVD provided unsatisfactory results in the visualization step, so it was excluded from this phase.
@@ -95,11 +95,11 @@ For the PCA and t-SNE methods, we conducted extensive hyperparameter testing to 
 
 ![Effect of Various perplexity values on KL Divergence](plots/figure6.png)
 
-## Selecting Optimal Evaluation Methods for Each DR Technique
+### Selecting Optimal Evaluation Methods for Each DR Technique
 
 In selecting the optimal run for each dimensionality reduction (DR) algorithm, we considered specific criteria tailored to the nature of each method. For PCA, we assessed reconstruction error and explained variance ratio, while for t-SNE, we examined the KL divergence.
 
-### PCA:
+#### PCA:
 
 - **Reconstruction Error:** Examined to quantify the difference between the original data and the reconstructed data in the reduced dimensions.  
   As shown in Figure~\ref{fig:reconstruction}, better reconstruction of the digits was experienced with a higher number of components.
@@ -107,12 +107,12 @@ In selecting the optimal run for each dimensionality reduction (DR) algorithm, w
 - **Explained Variance Ratio:** Assessed to measure the proportion of variance retained in the reduced dimensions, indicating the effectiveness of dimensionality reduction.  
   As shown in Figure~\ref{fig:variance}, the relationship between the number of components and the cumulative variance ratio is illustrated. With 40 principal components, approximately 80% cumulative variance is achieved, whereas with 200 principal components, nearly 97% cumulative variance is attained.
 
-### t-SNE:
+#### t-SNE:
 
 - **KL Divergence:** Evaluated to measure the difference between the original distribution and the distribution in the embedded space. t-SNE minimizes KL divergence to preserve local structures and similarities between data points.  
   As shown in Figure~\ref{fig:kl_divergence}, the relationship between KL Divergence and perplexity is demonstrated, showing that a higher perplexity tends to correspond to a lower KL Divergence. To manage computational resources, we used perplexity at a maximum value of 150.
 
-## Best Dimensionality Reduction Methods Selected
+### Best Dimensionality Reduction Methods Selected
 
 The optimal configuration was identified as t-SNE, utilizing 3 components, `learning_rate=auto`, and `perplexity=150`, to minimize KL divergence (1.95). Due to runtime constraints, we will utilize the best-performing t-SNE configuration with `n_components=2` to mitigate excessive computation time.
 
@@ -124,9 +124,9 @@ Additionally, PCA with `200 components` and `solver=full` was found to be effect
 
 t-SNE demonstrated superior separation and evaluation, making it suitable for clustering (part 3), while PCA achieved better results in classification (part 4). These chosen configurations will be utilized in subsequent sections for their specific purposes.
 
-# Clustering the Raw Data
+## Clustering the Raw Data
 
-## Clustering Algorithms Overview
+### Clustering Algorithms Overview
 
 We applied two clustering algorithms, namely K-Means and Gaussian Mixture Model (GMM), with a fixed number of clusters set to 10 for both methods, since there are 10 unique digits (0-9) in the MNIST datasets.
 
@@ -134,7 +134,7 @@ We applied two clustering algorithms, namely K-Means and Gaussian Mixture Model 
   
 - **Gaussian Mixture Model (GMM):** GMM is a probabilistic model that assumes that the data is generated by a mixture of several Gaussian distributions. It assigns probabilities to each point belonging to different clusters and allows for soft assignments.
 
-### Evaluating Clustering Results
+#### Evaluating Clustering Results
 
 As mentioned in class, there are several known metrics to evaluate clustering algorithm's performance. The homogeneity score measures how well each cluster contains only members of a single class, the completeness score evaluates if all members of a given class are assigned to the same cluster, the V-Measure is a balanced metric combining homogeneity and completeness, and the silhouette score quantifies the degree of separation between clusters.
 
@@ -153,7 +153,7 @@ The homogeneity score, completeness score, and V-Measure range from 0 to 1, wher
 
 </div>
 
-### Clustering Algorithms Visualization After Dimensionality Reduction
+#### Clustering Algorithms Visualization After Dimensionality Reduction
 
 Both K-Means and GMM are unsupervised learning methods, meaning they do not require labeled data for training. In our analysis, we used the default implementations and applied these clustering algorithms to the entire training dataset.
 
@@ -161,7 +161,7 @@ The visualizations above are conducted on the low-dimensional training data, aft
 
 ![Visualization of Clustering on Low-Dimensional Data](plots/figure8.png) 
 
-### Clustering the Data After Dimensionality Reduction
+#### Clustering the Data After Dimensionality Reduction
 
 We performed an experiment involving training the model ('fit' and 'predict') on the reduced data following the application of the optimal t-SNE (perplexity=150, n_components=2) and PCA (n_components=200, solver=full). The evaluation results, detailed in the table below, demonstrated substantial improvement for the data post t-SNE as for the high-dimensional data. This enhancement may be attributed to the heightened capability of these dimensionality reduction techniques in capturing pertinent patterns and reducing noise, thereby enhancing overall model performance while preventing from the model to overfit like on high-dimensional training data.
 
@@ -189,7 +189,7 @@ We performed an experiment involving training the model ('fit' and 'predict') on
 
 ![Visualization of Clustering After Training on Low-Dimensional Data](plots/figure9.png) 
 
-## Hyper-parameters Tuning on Clustering Methods
+### Hyper-parameters Tuning on Clustering Methods
 
 We conducted multiple tests with different hyper-parameters based on the chosen clustering method. The evaluation was performed on the entire dataset without dimensionality reduction to avoid losing important information present in the complete feature set. Despite the longer running time (approximately 1 hour for GMM hyper-parameters tuning) and sometimes suboptimal evaluation results, this approach ensured a comprehensive exploration of the hyper-parameter space considering the richness of information in the original feature space.
 
@@ -229,13 +229,13 @@ Gaussian Mixture Models (GMM) exhibit sensitivity to hyperparameters, particular
 We choose the best hyper-parameters combinations by their silhouette score. The best combination in each table is highlighted in bold.
 Please note that there is a difference of approximately 6 decimal places between the results. The variations are minimal, and we have presented only 5 decimal places in the tables due to space constraints.
 
-## Best model Selected
+### Best model Selected
 
 As depicted in Tables 1 and 2, the optimal clustering method is K-means with K-means++ initialization using the Lloyd algorithm. This approach not only yielded superior scores in terms of clustering quality and better visualization but also demonstrated significantly faster runtime compared to GMM models. 
 
 GMM might be less suitable for capturing the complex structures and variations in MNIST digits compared to the simplicity and cluster-centric approach of K-Means. The increased parameter complexity in GMM could lead to overfitting and misalignment with the dataset's true underlying structure, contributing to its suboptimal performance.
 
-# Classification
+## Classification
 
 We used two classifiers for this phase, each excelling in different aspects (with transformed data or with raw data).
 
@@ -243,7 +243,7 @@ We used two classifiers for this phase, each excelling in different aspects (wit
 
 - **Random Forest Classifier:** A supervised ensemble learning algorithm constructing multiple decision trees during training, with each tree trained on a random subset of the data. The final prediction is made by considering the most frequently predicted classes across the individual trees, reducing overfitting and enhancing accuracy.
 
-## Raw data
+### Raw data
 
 We conducted classification on the entire dataset using two classifiers: Random Forest Classifier with 200 estimators and k-nearest neighbors (k-NN) with 5 neighbors. Both algorithms achieved approximately 97% accuracy on the data. It is logical since k-NN is adept at capturing local patterns and relationships in high-dimensional spaces, while Random Forest demonstrates robustness to noise and overfitting in such settings due to its ensemble learning approach. Subsequently, we proceeded with hyperparameter testing for KNN due to its more efficient running time on the high-dimensional training data. Additionally, we experimented with standardizing the data, as mentioned in the first section, but observed no improvement in accuracy, so we decided not to include this preprocessing step. Results are visible within the notebook.
 
@@ -289,13 +289,13 @@ We conducted classification on the entire dataset using two classifiers: Random 
 
 </div>
 
-### Hyper-parameters Tuning on k-NN
+#### Hyper-parameters Tuning on k-NN
 
 For hyperparameter tuning in the k-Nearest Neighbors (k-NN) algorithm, we explored various combinations to determine the best configuration. Specifically, we tested different values for parameters such as the number of neighbors (`n_neighbors`), which represents the number of neighboring data points considered when determining the class or cluster of a given data point. Additionally, we experimented with the `weight` parameter, allowing different weight methods for the data points in the neighborhood, influencing their contribution to the decision. Furthermore, we considered the `algorithm` parameter, which specifies the algorithm used to compute the nearest neighbors (e.g., 'auto', 'kd_tree'). 
 
 The worse result was observed with `n_neighbors`=200, 'uniform' weights and the 'auto' algorithm, resulting in a test accuracy of 92.3%, while the best performance was achieved with `n_neighbors`=3, 'distance' weights, and the 'auto' algorithm, yielding a **test accuracy of 97.3%**. Detailed results for each run are available in the notebook.
 
-## Dimensionality reduction
+### Dimensionality reduction
 
 We conducted a classification on the data after dimensionality reduction, considering PCA with parameters (`n_components`=200, `solver`=full) and t-SNE with (`perplexity`=150, `n_components`=2), along with k-NN with 3 neighbors for PCA and 5 for t-SNE (for identical measurements while having best classifications) vs a Random Forest with 200 estimators. However, superior results were obtained with PCA, as shown in the table below. It may be attributed to its ability to capture essential patterns and structures in the data while reducing dimensionality, compared to t-SNE, which requires additional steps and may be sensitive to its initializations.
 
@@ -314,13 +314,13 @@ To implement t-SNE, we included additional steps due to its lack of a transform 
 
 </div>
 
-### Hyper-parameters Tuning on RF + PCA
+#### Hyper-parameters Tuning on RF + PCA
 
 For hyperparameter tuning in the Random Forest classifier applied to PCA-transformed data, we conducted an extensive exploration to identify the optimal configuration. The parameter grid encompassed various combinations, including `n_estimators` representing the number of trees in the forest, `max_depth` determining the maximum depth of the trees, `min_samples_split` and `min_samples_leaf` defining the minimum number of samples required to split an internal node and the minimum number of samples required to be a leaf node, respectively. Additionally, the `bootstrap` parameter, which controls whether bootstrap samples are used, was varied between True and False.
 
 The worse result was observed with `n_estimators`=50, `max_depth`=10, `min_samples_split`=5, `min_samples_leaf`=1, and `bootstrap`=True, resulting in a test accuracy of 90.66%, while the best performance was achieved with `n_estimators`=200, `max_depth`=None, `min_samples_split`=5, `min_samples_leaf`=2, and `bootstrap`=False, yielding a **test accuracy of 95.43%**. Detailed results for each run are available in the notebook.
 
-## Clustering
+### Clustering
 
 We developed a straightforward classifier, leveraging the optimal clustering results obtained in the previous step. We used k-means with 10 clusters and default parameters, which performed best in section 3. The classifier assigns a label to each cluster, specifically designating the most common digit found within the cluster as its representative label. To achieve this, we iterated through each unique cluster and determined the most prevalent digit by analyzing the actual labels (digits) corresponding to the data points within that cluster. The label assignment process was based on the digit with the highest frequency within the cluster.
 
@@ -330,7 +330,7 @@ We trained our classifier twice—once on the original high-dimensional data and
 
 ![Digits Prediction of kmeans with K Clusters](plots/figure10.png)
 
-### Experimenting with different Hyper-parameters
+#### Experimenting with different Hyper-parameters
 
 As we identified the optimal k-means algorithm in Section 3 (K-means with K-means++ initialization using the Lloyd algorithm) and explored various values for the `algorithm` and `init` parameters, we now investigated the impact of the number of clusters (`n_clusters`) and examined different values for the `n_init` parameter on the test set accuracy. In k-means clustering, the `n_init` parameter determines the number of times the k-means algorithm will be executed with different centroid seeds. We conducted these experiments using a classifier trained on the high-dimensional data. The results are displayed in the table below.
 
@@ -353,7 +353,7 @@ As we identified the optimal k-means algorithm in Section 3 (K-means with K-mean
 
 </div>
 
-# Summary and Conclusions
+## Summary and Conclusions
 
 In this assignment, we used a range of techniques to categorize and group the MNIST dataset. We investigated various dimensionality reduction approaches to simplify the MNIST data, conducted unsupervised tasks such as clustering to identify similarities and patterns, and utilized classifiers to evaluate performance on a new unseen data. In each section, we thoroughly examined diverse parameters for each technique, in order to identify the optimal combinations at each stage. Eventually, we created a basic classifier that used majority voting to assign the most probable digit to each cluster.
 
