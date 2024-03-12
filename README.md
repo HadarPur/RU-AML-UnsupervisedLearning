@@ -149,6 +149,8 @@ The homogeneity score, completeness score, and V-Measure range from 0 to 1, wher
 | V-Measure           | 0.4979  | 0.3047 |
 | Silhouette Score    | 0.0593  | -0.0054 |
 
+*Table 3: Clustering Results*
+
 </div>
 
 ##### Clustering Algorithms Visualization After Dimensionality Reduction
@@ -172,6 +174,17 @@ We performed an experiment involving training the model ('fit' and 'predict') on
 | V-Measure           | 0.4972  | 0.4583 |
 | Silhouette Score    | 0.0640  | 0.0069 |
 
+*Table 4: PCA Clustering Results*
+
+| Metric              | K-Means | GMM    |
+|---------------------|---------|--------|
+| Homogeneity Score   | 0.8336  | 0.8328 |
+| Completeness Score  | 0.8356  | 0.8556 |
+| V-Measure           | 0.8346  | 0.8446 |
+| Silhouette Score    | 0.5027  | 0.5050 |
+
+*Table 5: t-SNE Clustering Results*
+
 </div>
 
 ![Visualization of Clustering After Training on Low-Dimensional Data](plots/figure9.png) 
@@ -191,6 +204,8 @@ We conducted multiple tests with different hyper-parameters based on the chosen 
 | Random          | Elkan     | 0.49432     | 0.50157      | 0.49792   | 0.05934    |
 | K-means++       | Elkan     | 0.49429     | 0.50154      | 0.49895   | 0.05934    |
 
+*Table 6: KMeans Hyperparameters Results*
+
 </div>
 
 **GMM:**
@@ -207,9 +222,71 @@ Gaussian Mixture Models (GMM) exhibit sensitivity to hyperparameters, particular
 | K-means++            | 1e-06     | 0.26902     | 0.35726      | 0.30693   | -0.00193   |
 | Random from Data     | 1e-06     | 0.26202     | 0.31943      | 0.28790   | -0.00193   |
 
+*Table 7: GMM Hyperparameters Results*
+
 </div>
 
 We choose the best hyper-parameters combinations by their silhouette score. The best combination in each table is highlighted in bold.
 Please note that there is a difference of approximately 6 decimal places between the results. The variations are minimal, and we have presented only 5 decimal places in the tables due to space constraints.
+
+### Best model Selected
+
+As depicted in Tables 1 and 2, the optimal clustering method is K-means with K-means++ initialization using the Lloyd algorithm. This approach not only yielded superior scores in terms of clustering quality and better visualization but also demonstrated significantly faster runtime compared to GMM models. 
+
+GMM might be less suitable for capturing the complex structures and variations in MNIST digits compared to the simplicity and cluster-centric approach of K-Means. The increased parameter complexity in GMM could lead to overfitting and misalignment with the dataset's true underlying structure, contributing to its suboptimal performance.
+
+### Classification
+
+We used two classifiers for this phase, each excelling in different aspects (with transformed data or with raw data).
+
+- **k-NN (k-Nearest Neighbors):** A supervised classification algorithm that determines the class of a data point based on the majority class among its k-nearest neighbors, utilizing distance measurements.
+
+- **Random Forest Classifier:** A supervised ensemble learning algorithm constructing multiple decision trees during training, with each tree trained on a random subset of the data. The final prediction is made by considering the most frequently predicted classes across the individual trees, reducing overfitting and enhancing accuracy.
+
+### Raw data
+
+We conducted classification on the entire dataset using two classifiers: Random Forest Classifier with 200 estimators and k-nearest neighbors (k-NN) with 5 neighbors. Both algorithms achieved approximately 97% accuracy on the data. It is logical since k-NN is adept at capturing local patterns and relationships in high-dimensional spaces, while Random Forest demonstrates robustness to noise and overfitting in such settings due to its ensemble learning approach. Subsequently, we proceeded with hyperparameter testing for KNN due to its more efficient running time on the high-dimensional training data. Additionally, we experimented with standardizing the data, as mentioned in the first section, but observed no improvement in accuracy, so we decided not to include this preprocessing step. Results are visible within the notebook.
+
+<div align="center">
+
+| Digit | Precision | Recall | F1-Score |
+|-------|-----------|--------|----------|
+| 0     | 0.98      | 0.99   | 0.99     |
+| 1     | 0.98      | 0.98   | 0.98     |
+| 2     | 0.95      | 0.97   | 0.96     |
+| 3     | 0.96      | 0.95   | 0.96     |
+| 4     | 0.96      | 0.97   | 0.97     |
+| 5     | 0.97      | 0.96   | 0.97     |
+| 6     | 0.98      | 0.98   | 0.98     |
+| 7     | 0.97      | 0.97   | 0.97     |
+| 8     | 0.96      | 0.95   | 0.96     |
+| 9     | 0.96      | 0.95   | 0.95     |
+|-------|-----------|--------|----------|
+| Accuracy |         |        | 0.97     |
+| Macro avg | 0.97    | 0.97   | 0.97     |
+| Weighted avg | 0.97 | 0.97   | 0.97     |
+
+*Table 8: Classification Performance over RF Classifier*
+
+| Digit | Precision | Recall | F1-Score |
+|-------|-----------|--------|----------|
+| 0     | 0.98      | 0.99   | 0.99     |
+| 1     | 0.96      | 0.99   | 0.98     |
+| 2     | 0.98      | 0.96   | 0.97     |
+| 3     | 0.97      | 0.97   | 0.97     |
+| 4     | 0.97      | 0.97   | 0.97     |
+| 5     | 0.97      | 0.97   | 0.97     |
+| 6     | 0.98      | 0.99   | 0.98     |
+| 7     | 0.96      | 0.97   | 0.97     |
+| 8     | 0.99      | 0.93   | 0.96     |
+| 9     | 0.95      | 0.96   | 0.96     |
+|-------|-----------|--------|----------|
+| Accuracy |         |        | 0.97     |
+| Macro avg | 0.97    | 0.97   | 0.97     |
+| Weighted avg | 0.97 | 0.97   | 0.97     |
+
+*Table 9: Classification Performance over k-NN Classifier*
+
+</div>
 
 
