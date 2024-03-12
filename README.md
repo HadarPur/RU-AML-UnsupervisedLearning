@@ -8,8 +8,7 @@ Submitted as a project report for Advanced Machine Learning course, IDC, 2024
 
 - **Dataset Overview:** The MNIST dataset comprises 70,000 images. Each image represents a single, centered, handwritten digit (0-9) and is size-normalized and grey-scaled. The images are presented as a 28x28 pixel grid, resulting in 784 features.
 
-![Digits Data Examples](plots/part_0/example_digits.png)
-![Digits Data Distribution](plots/part_0/digit_distribution.png)
+![Digits Data Examples](plots/figure1.png)
 
 - **Size-Normalization and Centering:** During initial preprocessing, the dataset underwent size-normalization and centering to ensure uniformity in digit representations and simplify the learning process for machine learning models.
 
@@ -31,10 +30,8 @@ We utilized various dimensionality reduction techniques to enhance the understan
 
 For all these techniques, default parameters were applied to obtain a baseline reduction, capturing essential patterns and structures within the data.
 
-![PCA Visualization](plots/part_1/pca_2.png)
-![TSVD Visualization](plots/part_1/svd_2.png)
-![UMAP and t-SNE Visualization](plots/part_1/umap_2.png)
-![t-SNE Visualization](plots/part_1/tsne_2.png)
+![PCA TSVD Visualization](plots/figure2.png)
+![UMAP and t-SNE Visualization](plots/figure3.png)
 
 ## Hyper-parameters Tuning On DR Methods
 
@@ -63,17 +60,9 @@ For the PCA and t-SNE methods, we conducted extensive hyperparameter testing to 
 
 *Table 1: PCA Hyper-parameters tuning Results*
 
-![PCA Reconstruction of digits according to different n_components](plots/part_1/recon_2.png)
-![PCA Reconstruction of digits according to different n_components](plots/part_1/recon_102.png)
-![PCA Reconstruction of digits according to different n_components](plots/part_1/recon_202.png)
+![PCA Reconstruction of digits according to different n_components](plots/figure4.png)
 
-*Figure 1: PCA Reconstruction of digits according to different n_components*
-
-![PCA Explained Variance for different number of n_components](plots/part_1/exp_var.png)
-![PCA Explained Variance for different number of n_components](plots/part_1/comu_expl_var.png)
-![PCA Explained Variance for different number of n_components](plots/part_1/expl_var_per_com.png)
-
-*Figure 2: PCA Explained Variance for different number of n_components*
+![PCA Explained Variance for different number of n_components](plots/figure5.png)
 
 - **t-SNE:** The `n_components` parameter specifies the dimensionality of the embedded space. A lower value may capture global structures, while higher values might preserve more local relationships. The `learning_rate` influences the step size during optimization, affecting the convergence and final layout of the data in the low-dimensional space. The `perplexity` is a hyperparameter that balances the attention given to local and global aspects of the data. It is used to define the effective number of neighbors for each data point during the dimensionality reduction process. 
 
@@ -96,7 +85,4 @@ For the PCA and t-SNE methods, we conducted extensive hyperparameter testing to 
 
 *Table 2: t-SNE Hyper-parameters tuning Results*
 
-![Effect of Various perplexity values on KL Divergence](plots/part_1/tsne_prep_2_auto.png)
-![Effect of Various perplexity values on KL Divergence](plots/part_1/tsne_prep_3_auto.png)
-
-*Figure 3: Effect of Various perplexity values on KL Divergence*
+![Effect of Various perplexity values on KL Divergence](plots/figure6.png)
