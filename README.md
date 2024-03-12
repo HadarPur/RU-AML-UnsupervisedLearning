@@ -40,6 +40,8 @@ For the PCA and t-SNE methods, we conducted extensive hyperparameter testing to 
 
 - **PCA:** he `n_components` parameter determines the number of principal components to retain. It influences the amount of variance retained in the reduced space. The `svd_solver` parameter, like 'randomized' or 'full', defines the algorithm used for singular value decomposition and impacts the computational efficiency.
 
+<div align="center">
+
 | n_components | svd_solver | explained_variance | reconstruction_error |
 |--------------|------------|--------------------|----------------------|
 | 5            | auto       | 0.333790           | 2910.795606          |
@@ -60,11 +62,15 @@ For the PCA and t-SNE methods, we conducted extensive hyperparameter testing to 
 
 *Table 1: PCA Hyper-parameters tuning Results*
 
+</div>
+
 ![PCA Reconstruction of digits according to different n_components](plots/figure4.png)
 
 ![PCA Explained Variance for different number of n_components](plots/figure5.png)
 
 - **t-SNE:** The `n_components` parameter specifies the dimensionality of the embedded space. A lower value may capture global structures, while higher values might preserve more local relationships. The `learning_rate` influences the step size during optimization, affecting the convergence and final layout of the data in the low-dimensional space. The `perplexity` is a hyperparameter that balances the attention given to local and global aspects of the data. It is used to define the effective number of neighbors for each data point during the dimensionality reduction process. 
+
+<div align="center">
 
 | n_components | perplexity | learning_rate | min_divergence |
 |--------------|------------|---------------|----------------|
@@ -84,5 +90,7 @@ For the PCA and t-SNE methods, we conducted extensive hyperparameter testing to 
 | **3**        | **150**    | **auto**      | **1.925341**   |
 
 *Table 2: t-SNE Hyper-parameters tuning Results*
+
+</div>
 
 ![Effect of Various perplexity values on KL Divergence](plots/figure6.png)
