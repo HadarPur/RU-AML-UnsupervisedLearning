@@ -102,15 +102,15 @@ In selecting the optimal run for each dimensionality reduction (DR) algorithm, w
 #### PCA:
 
 - **Reconstruction Error:** Examined to quantify the difference between the original data and the reconstructed data in the reduced dimensions.  
-  As shown in Figure~\ref{fig:reconstruction}, better reconstruction of the digits was experienced with a higher number of components.
+  As shown in Figur 4, better reconstruction of the digits was experienced with a higher number of components.
 
 - **Explained Variance Ratio:** Assessed to measure the proportion of variance retained in the reduced dimensions, indicating the effectiveness of dimensionality reduction.  
-  As shown in Figure~\ref{fig:variance}, the relationship between the number of components and the cumulative variance ratio is illustrated. With 40 principal components, approximately 80% cumulative variance is achieved, whereas with 200 principal components, nearly 97% cumulative variance is attained.
+  As shown in Figure 5, the relationship between the number of components and the cumulative variance ratio is illustrated. With 40 principal components, approximately 80% cumulative variance is achieved, whereas with 200 principal components, nearly 97% cumulative variance is attained.
 
 #### t-SNE:
 
 - **KL Divergence:** Evaluated to measure the difference between the original distribution and the distribution in the embedded space. t-SNE minimizes KL divergence to preserve local structures and similarities between data points.  
-  As shown in Figure~\ref{fig:kl_divergence}, the relationship between KL Divergence and perplexity is demonstrated, showing that a higher perplexity tends to correspond to a lower KL Divergence. To manage computational resources, we used perplexity at a maximum value of 150.
+  As shown in Figure 6, the relationship between KL Divergence and perplexity is demonstrated, showing that a higher perplexity tends to correspond to a lower KL Divergence. To manage computational resources, we used perplexity at a maximum value of 150.
 
 ### Best Dimensionality Reduction Methods Selected
 
