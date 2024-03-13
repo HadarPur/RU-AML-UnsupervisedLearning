@@ -118,9 +118,7 @@ The optimal configuration was identified as t-SNE, utilizing 3 components, `lear
 
 Additionally, PCA with `200 components` and `solver=full` was found to be effective, maximizing the explained variance ratio (97%) and minimizing reconstruction error (147.5).
 
-![t-SNE](plots/part_1/tsne_digits.png) ![PCA](plots/figure7.png)
-
-*Figure: Inverse Point Images*
+![PCA](plots/figure7.png)
 
 t-SNE demonstrated superior separation and evaluation, making it suitable for clustering (part 3), while PCA achieved better results in classification (part 4). These chosen configurations will be utilized in subsequent sections for their specific purposes.
 
